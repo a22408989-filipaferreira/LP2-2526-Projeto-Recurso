@@ -8,6 +8,7 @@ public class Player extends Programmer{
     private int currentPosition;
     private PlayerStatus status;
 
+    /* constructor */
     public Player(int id, String name, String languagesStr, Color color){
         super(id, name, languagesStr, color);
     }

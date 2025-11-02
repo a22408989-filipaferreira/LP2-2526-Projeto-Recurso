@@ -1,38 +1,37 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
-    ArrayList<Slot> slots;
+    /* fields */
+    private List<Slot> slots;
+    private int size;
 
+    /* getters */
+    public int getSize() {
+        return size;
+    }
 
-    public Board() {
+    public List<Slot> getSlots() {
+        return slots;
+    }
+
+    /* constructor */
+    public Board(int size) {
+        this.size = size;
         this.slots = new ArrayList<>();
-    }
 
-    public void createSlots(int numberOfSlots) {
-        for (int slotNumber = 0; slotNumber < numberOfSlots; slotNumber++) {
-            slots.add(new Slot(slotNumber));
+        for (int i = 1; i <= size; i++) {
+            this.slots.add(new Slot(i));
         }
     }
 
-    public Slot getSlot(int position) {
-        if (position >= 0 && position < slots.size()) {
-            return slots.get(position);
+    /* methods */
+    public Slot getSlot(int index) {
+        if (index < 1 || index > size){
+            return null;
         }
-        return null;
-    }
-
-    public boolean slotisOccupied(int position) {
-        Slot slot = getSlot(position);
-        return slot != null && slot.isOccupied();
-    }
-
-
-    public void setPlayerInSlot(Player player, int position) {
-        Slot slot = getSlot(position);
-        if (slot != null) {
-            slot.setOcupant(player);
-        }
+        return slots.get(index - 1);
     }
 }

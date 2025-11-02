@@ -5,7 +5,7 @@ public enum PlayerStatus {
     IN_GAME("Em Jogo"),
     DEFEATED("Derrotado");
 
-    /* fields */
+    /* field */
     private final String displayName;
 
     /* getters */
@@ -13,7 +13,7 @@ public enum PlayerStatus {
         return displayName;
     }
 
-    /* constructors */
+    /* constructor */
     PlayerStatus(String displayName) {
         this.displayName = displayName;
     }
