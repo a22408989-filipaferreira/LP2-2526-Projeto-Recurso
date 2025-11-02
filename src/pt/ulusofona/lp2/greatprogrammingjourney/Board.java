@@ -22,16 +22,4 @@ public class Board {
     public int getSize() {
         return size;
     }
-
-    public ArrayList<Slot> getSlots() {
-        return slots;
-    }
-
-    /* methods */
-    public Slot getSlot(int index) {
-        if (index < 1 || index > size){
-            return null;
-        }
-        return slots.get(index - 1);
-    }
 }

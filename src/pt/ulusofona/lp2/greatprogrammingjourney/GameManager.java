@@ -24,14 +24,6 @@ public class GameManager {
         this.currentTurn = 0;
     }
 
-    /* getters */
-    public String getWinnerName() {
-        if (winner == null) {
-            return null;
-        }
-        return winner.getName();
-    }
-
     /* methods */
     public boolean createInitialBoard(String[][] playerInfo, int boardSize) {
         if (playerInfo == null || playerInfo.length == 0 || boardSize <= 0) {
