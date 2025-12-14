@@ -1,7 +1,10 @@
-package pt.ulusofona.lp2.greatprogrammingjourney;
+package pt.ulusofona.lp2.greatprogrammingjourney.core;
 
+import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItem;
+import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItemFactory;
 import pt.ulusofona.lp2.greatprogrammingjourney.enums.Color;
 import pt.ulusofona.lp2.greatprogrammingjourney.enums.PlayerStatus;
+import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 
 import javax.swing.*;
 import java.util.*;
@@ -89,6 +92,52 @@ public class GameManager {
         this.currentTurn = 1;
         this.gameIsOver = false;
         this.winner = null;
+
+        return true;
+    }
+
+    public boolean createInitialBoard(String[][] playerInfo, int boardSize, String[][] abyssesAndTools) {
+        if (!createInitialBoard(playerInfo, boardSize)) {
+            return false;
+        }
+
+        if (abyssesAndTools == null) {
+            return true;
+        }
+
+        for (String[] slotInfo  : abyssesAndTools) {
+            if (slotInfo == null || slotInfo.length < 3) {
+                return false;
+            }
+
+            int position;
+            int id;
+            String type;
+
+            try {
+                position = Integer.parseInt(slotInfo[0]);
+                type = slotInfo[1];
+                id = Integer.parseInt(slotInfo[2]);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+
+            if (position < 1 || position > board.getSize()) {
+                return false;
+            }
+
+            if (!type.equals("A") && !type.equals("T")) {
+                return false;
+            }
+
+            BoardItem item = BoardItemFactory.create(type, id);
+            if (item == null) {
+                return false;
+            }
+
+            Slot slot = board.getSlot(position);
+            slot.setItem(item);
+        }
 
         return true;
     }
@@ -186,6 +235,13 @@ public class GameManager {
         turnManager.nextTurn();
 
         return true;
+    }
+
+    public String reactToAbyssOrTool() {
+        Player current = players.get(currentTurn);
+        Slot slot = board.getSlot(current.getCurrentPosition());
+
+        return slot.react(current);
     }
 
     public boolean gameIsOver(){
