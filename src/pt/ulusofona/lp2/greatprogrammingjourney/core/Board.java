@@ -1,7 +1,6 @@
-package pt.ulusofona.lp2.greatprogrammingjourney;
+package pt.ulusofona.lp2.greatprogrammingjourney.core;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Board {
     /* fields */
@@ -21,5 +20,9 @@ public class Board {
     /* getters */
     public int getSize() {
         return size;
+    }
+
+    public Slot getSlot(int position) {
+        return slots.get(position - 1); /* positions start at 1 */
     }
 }
