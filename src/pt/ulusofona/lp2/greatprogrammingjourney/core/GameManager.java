@@ -184,6 +184,30 @@ public class GameManager {
         return player.getInfoString();
     }
 
+    public String getProgrammersInfo() {
+        if (players == null || players.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        for (Player player : players) {
+            if (player.getStatus() != PlayerStatus.IN_GAME) {
+                continue;
+            }
+
+            if (!first) {
+                result.append(" | ");
+            }
+
+            result.append(getProgrammerInfoAsStr(player.getId()));
+            first = false;
+        }
+
+        return result.toString();
+    }
+
     public String[] getSlotInfo(int position){
         if (board == null || position < 1 || position > board.getSize()) {
             return null;

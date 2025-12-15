@@ -42,6 +42,8 @@ public class Player {
         return currentPosition;
     }
 
+    public PlayerStatus getStatus(){ return status; }
+
     /* setters */
     public void setCurrentPosition(int position){
         this.currentPosition = position;
