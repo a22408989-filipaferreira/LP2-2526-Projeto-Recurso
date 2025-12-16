@@ -249,20 +249,26 @@ public class GameManager {
         return turnManager.getCurrentPlayerID();
     }
 
-    public boolean moveCurrentPlayer(int nrSpaces){
+    public boolean moveCurrentPlayer(int nrSpaces) {
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
+
         if (board == null || turnManager == null) {
             return false;
         }
 
         Player currentPlayer = turnManager.getCurrentPlayer();
 
+        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
+            turnManager.nextTurn();
+            return false;
+        }
+
         if (currentPlayer.isStuck()) {
-            turnManager.nextTurn(); /* player loses the play */
-            currentTurn++;
-            return true;
+            currentPlayer.setStuck(false);
+            turnManager.nextTurn();
+            return false;
         }
 
         currentPlayer.setLastDiceValue(nrSpaces);
@@ -278,12 +284,15 @@ public class GameManager {
 
         currentPlayer.setCurrentPosition(newPosition);
 
+        reactToAbyssOrTool();
+
         currentTurn++;
 
         turnManager.nextTurn();
 
         return true;
     }
+
 
     public String reactToAbyssOrTool() {
         Player currentPlayer = turnManager.getCurrentPlayer();
