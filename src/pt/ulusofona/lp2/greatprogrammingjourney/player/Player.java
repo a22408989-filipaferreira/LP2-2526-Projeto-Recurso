@@ -96,7 +96,6 @@ public class Player {
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
         String langsStr = String.join("; ", langs);
         String toolsStr ;
-
         if(tools.isEmpty()){
             toolsStr = "No tools";
         } else {
@@ -111,8 +110,8 @@ public class Player {
         info[0] = String.valueOf(id);
         info[1] = name;
         info[2] = String.valueOf(currentPosition);
-        info[3] = langsStr;
-        info[4] = status.getDisplayName();
+        info[3] = toolsStr;
+        info[4] = langsStr;
         info[5] = status.getDisplayName();
 
         return String.join(" | ", info);
