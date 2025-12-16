@@ -9,7 +9,7 @@ import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 
 import static org.junit.Assert.*;
 
-class PlayerTest {
+class TestPlayer {
 
     @Test
     void testConstructorWithLanguages() {
