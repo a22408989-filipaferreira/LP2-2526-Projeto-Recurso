@@ -95,6 +95,17 @@ public class Player {
         ArrayList<String> langs = new ArrayList<>(favoriteLanguages);
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
         String langsStr = String.join("; ", langs);
+        String toolsStr ;
+
+        if(tools.isEmpty()){
+            toolsStr = "No tools";
+        } else {
+            ArrayList<String> toolNames = new ArrayList<>();
+            for(Tool tool: tools){
+                toolNames.add(tool.getName());
+            }
+            toolsStr= String.join(", ", toolNames);
+        }
 
         String[] info = new String[5];
         info[0] = String.valueOf(id);
