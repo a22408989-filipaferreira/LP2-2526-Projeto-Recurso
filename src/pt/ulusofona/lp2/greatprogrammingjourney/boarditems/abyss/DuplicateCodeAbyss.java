@@ -11,6 +11,9 @@ public class DuplicateCodeAbyss extends Abyss {
     /* method */
     @Override
     public String react(Player player) {
-        return null;
+        int previousPosition = player.getPreviousPosition();
+        player.setCurrentPosition(previousPosition);
+
+        return "Caiu em Código Duplicado! Recuou para a casa anterior.";
     }
 }
