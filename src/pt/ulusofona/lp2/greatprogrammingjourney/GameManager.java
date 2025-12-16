@@ -370,14 +370,18 @@ public class GameManager {
         return message;
     }
 
-    public boolean gameIsOver(){
+    public boolean gameIsOver() {
         if (board == null) {
             return false;
         }
 
         int lastPosition = board.getSize();
 
-        for (Player player : players) {
+        List<Player> sortedPlayers = new ArrayList<>(players);
+
+        sortedPlayers.sort(Comparator.comparing(Player::getName, String.CASE_INSENSITIVE_ORDER));
+
+        for (Player player : sortedPlayers) {
             if (player.getCurrentPosition() == lastPosition) {
                 winner = player;
                 gameIsOver = true;
