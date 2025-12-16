@@ -11,6 +11,21 @@ public class LogicErrorAbyss extends Abyss {
     /* method */
     @Override
     public String react(Player player) {
-        return null;
+        int diceValue = player.getLastDiceValue();
+        int retreat = diceValue / 2;
+
+        if (retreat <= 0) {
+            return "Erro de lógica: nenhum recuo aplicado";
+        }
+
+        int newPosition = player.getCurrentPosition() - retreat;
+
+        if (newPosition < 1) {
+            newPosition = 1;
+        }
+
+        player.setCurrentPosition(newPosition);
+
+        return "Caiu num erro de lógica! Recuou " + retreat + " casas.";
     }
 }

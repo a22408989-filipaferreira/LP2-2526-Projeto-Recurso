@@ -258,9 +258,10 @@ public class GameManager {
         }
 
         Player currentPlayer = turnManager.getCurrentPlayer();
+        currentPlayer.setLastDiceValue(nrSpaces);
+
         int currentPosition = currentPlayer.getCurrentPosition();
         int boardSize = board.getSize();
-
         int newPosition = currentPosition + nrSpaces;
 
         if (newPosition > boardSize) {

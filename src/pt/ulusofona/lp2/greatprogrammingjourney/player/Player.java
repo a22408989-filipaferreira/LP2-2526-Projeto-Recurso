@@ -15,6 +15,7 @@ public class Player {
     private int currentPosition;
     private PlayerStatus status;
     private ArrayList<Integer> positionHistory = new ArrayList<>();
+    private int lastDiceValue;
 
     /* constructor */
     public Player(int id, String name, String languagesStr, Color color){
@@ -45,6 +46,10 @@ public class Player {
 
     public PlayerStatus getStatus(){ return status; }
 
+    public int getLastDiceValue() {
+        return lastDiceValue;
+    }
+
     /* setters */
     public void setCurrentPosition(int position){
         positionHistory.add(this.currentPosition);
@@ -53,6 +58,10 @@ public class Player {
 
     public void setStatus(PlayerStatus status) {
         this.status = status;
+    }
+
+    public void setLastDiceValue(int lastDiceValue) {
+        this.lastDiceValue = lastDiceValue;
     }
 
     /* methods */
