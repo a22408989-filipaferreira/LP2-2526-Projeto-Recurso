@@ -340,7 +340,7 @@ public class GameManager {
             }
         }
 
-        if(players.size() >= 2){
+        if(getPlayersInPosition(position).size() >= 2){
             if (item.affectsAllPlayersInSlot()) {
                 for (Player p : getPlayersInPosition(position)) {
                     if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
