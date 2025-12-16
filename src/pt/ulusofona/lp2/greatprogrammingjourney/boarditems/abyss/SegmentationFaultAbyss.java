@@ -11,6 +11,19 @@ public class SegmentationFaultAbyss extends Abyss {
     /* method */
     @Override
     public String react(Player player) {
-        return null;
+        int newPosition = player.getCurrentPosition() - 3;
+
+        if (newPosition < 1) {
+            newPosition = 1;
+        }
+
+        player.setCurrentPosition(newPosition);
+
+        return "Todos os programadores na casa sofreram um Segmentation Fault e recuaram 3 casas.";
+    }
+
+    @Override
+    public boolean affectsAllPlayersInSlot() {
+        return true;
     }
 }
