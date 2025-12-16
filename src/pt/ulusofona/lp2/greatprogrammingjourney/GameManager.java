@@ -275,11 +275,11 @@ public class GameManager {
             return false;
         }
 
-        if (currentPlayer.getFavoriteLanguages().contains("Assembly") && nrSpaces > 2) {
+        if (currentPlayer.getFavoriteLanguages().getFirst().equals("Assembly") && nrSpaces > 2) {
             return false;
         }
 
-        if (currentPlayer.getFavoriteLanguages().contains("C") && nrSpaces > 3){
+        if (currentPlayer.getFavoriteLanguages().getFirst().equals("C") && nrSpaces > 3){
             return false;
         }
 
