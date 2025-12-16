@@ -112,4 +112,14 @@ public class Player {
 
         return positionHistory.get(size - 2);
     }
+
+    public int getPreviousPosition() {
+        int size = positionHistory.size();
+
+        if (size < 1) {
+            return 1;
+        }
+
+        return positionHistory.get(size - 1);
+    }
 }
