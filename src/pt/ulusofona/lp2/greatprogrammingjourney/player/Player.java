@@ -113,6 +113,7 @@ public class Player {
         info[2] = String.valueOf(currentPosition);
         info[3] = langsStr;
         info[4] = status.getDisplayName();
+        info[5] = status.getDisplayName();
 
         return String.join(" | ", info);
     }
