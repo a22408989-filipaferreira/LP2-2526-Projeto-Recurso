@@ -296,6 +296,10 @@ public class GameManager {
             return null;
         }
 
+        if (currentPlayer.hasToolThatCancels(item)) {
+            return item.getName() + " anulado por ferramenta.";
+        }
+
         String message = null;
 
         if (item.swapsStuckPlayer()) {
