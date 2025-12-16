@@ -17,6 +17,8 @@ public class UnitTestsTool extends Tool {
 
     @Override
     public boolean cancels(BoardItem item) {
-        return false;
+        int id = item.getId();
+        return id == 1  /* Logic Error abyss */
+                || id == 5; /* Duplicate Code abyss */
     }
 }
