@@ -11,6 +11,7 @@ public class CrashAbyss extends Abyss {
     /* method */
     @Override
     public String react(Player player) {
-        return null;
+        player.setCurrentPosition(1);
+        return "Caiu em Crash! Voltou à primeira casa.";
     }
 }
