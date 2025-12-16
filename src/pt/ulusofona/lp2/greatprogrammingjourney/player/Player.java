@@ -14,6 +14,7 @@ public class Player {
     private Color avatarColor;
     private int currentPosition;
     private PlayerStatus status;
+    private ArrayList<Integer> positionHistory = new ArrayList<>();
 
     /* constructor */
     public Player(int id, String name, String languagesStr, Color color){
@@ -46,6 +47,7 @@ public class Player {
 
     /* setters */
     public void setCurrentPosition(int position){
+        positionHistory.add(this.currentPosition);
         this.currentPosition = position;
     }
 
@@ -81,5 +83,15 @@ public class Player {
         info[4] = status.getDisplayName();
 
         return String.join(" | ", info);
+    }
+
+    public int getPositionTwoMovesAgo() {
+        int size = positionHistory.size();
+
+        if (size < 2) {
+            return 1;
+        }
+
+        return positionHistory.get(size - 2);
     }
 }
