@@ -112,6 +112,14 @@ public class Player {
         return String.join(" | ", info);
     }
 
+    public String getShortInfoString() {
+        String[] info = new String[2];
+        info[0] = name;
+        info[1] = getToolsAsStr();
+
+        return String.join(" : ", info);
+    }
+
     public int getPositionTwoMovesAgo() {
         int size = positionHistory.size();
 

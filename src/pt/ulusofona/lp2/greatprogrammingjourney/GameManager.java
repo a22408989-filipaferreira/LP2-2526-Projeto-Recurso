@@ -207,7 +207,7 @@ public class GameManager {
                 result.append(" | ");
             }
 
-            result.append(getProgrammerInfoAsStr(player.getId()));
+            result.append(player.getShortInfoString());
             first = false;
         }
 
