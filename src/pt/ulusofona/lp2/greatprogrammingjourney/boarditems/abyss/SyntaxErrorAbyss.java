@@ -5,7 +5,7 @@ import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 public class SyntaxErrorAbyss extends Abyss {
     /* constructor */
     public SyntaxErrorAbyss() {
-        super(0, "Erro de Sintaxe");
+        super(0, "Erro de sintaxe");
     }
 
     /* method */

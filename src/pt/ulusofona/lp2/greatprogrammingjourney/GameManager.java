@@ -249,44 +249,6 @@ public class GameManager {
         return turnManager.getCurrentPlayerID();
     }
 
-    public boolean moveCurrentPlayer(int nrSpaces) {
-        if (nrSpaces < 1 || nrSpaces > 6) {
-            return false;
-        }
-
-        if (board == null || turnManager == null) {
-            return false;
-        }
-
-        Player currentPlayer = turnManager.getCurrentPlayer();
-
-        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
-            return false;
-        }
-
-        if (currentPlayer.isStuck()) {
-            currentPlayer.setStuck(false);
-            return false;
-        }
-
-        currentPlayer.setLastDiceValue(nrSpaces);
-
-        int currentPosition = currentPlayer.getCurrentPosition();
-        int boardSize = board.getSize();
-        int newPosition = currentPosition + nrSpaces;
-
-        if (newPosition > boardSize) {
-            int excess = newPosition - boardSize;
-            newPosition = boardSize - excess;
-        }
-
-        currentPlayer.setCurrentPosition(newPosition);
-
-        reactToAbyssOrTool();
-
-        return true;
-    }
-
     public String reactToAbyssOrTool() {
         Player currentPlayer = turnManager.getCurrentPlayer();
         int position = currentPlayer.getCurrentPosition();
@@ -308,9 +270,7 @@ public class GameManager {
 
         if (item.swapsStuckPlayer()) {
             for (Player p : getPlayersInPosition(position)) {
-                if (p.isStuck()) {
-                    p.setStuck(false);
-                }
+                p.setStuck(false);
             }
         }
 
@@ -322,18 +282,21 @@ public class GameManager {
             }
         }
 
-        currentTurn++;
-
         if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
+            currentTurn++;
             turnManager.nextTurn();
             return message == null ? "" : message;
         }
 
         if (currentPlayer.isStuck()) {
+            currentTurn++;
+            turnManager.nextTurn();
             return message == null ? "" : message;
         }
 
+        currentTurn++;
         turnManager.nextTurn();
+
         return message == null ? "" : message;
     }
 
