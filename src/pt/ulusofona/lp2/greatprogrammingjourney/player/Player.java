@@ -106,7 +106,7 @@ public class Player {
             toolsStr= String.join(", ", toolNames);
         }
 
-        String[] info = new String[5];
+        String[] info = new String[6];
         info[0] = String.valueOf(id);
         info[1] = name;
         info[2] = String.valueOf(currentPosition);
