@@ -82,12 +82,15 @@ public class Player {
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
         String langsStr = String.join("; ", langs);
 
-        String[] info = new String[5];
+        String[] info = new String[7];
         info[0] = String.valueOf(id);
         info[1] = name;
         info[2] = langsStr;
         info[3] = avatarColor.getDisplayName();
         info[4] = String.valueOf(currentPosition);
+        info[5] = getToolsAsStr();
+        info[6] = status.getDisplayName();
+
         return info;
     }
 
@@ -95,22 +98,12 @@ public class Player {
         ArrayList<String> langs = new ArrayList<>(favoriteLanguages);
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
         String langsStr = String.join("; ", langs);
-        String toolsStr ;
-        if(tools.isEmpty()){
-            toolsStr = "No tools";
-        } else {
-            ArrayList<String> toolNames = new ArrayList<>();
-            for(Tool tool: tools){
-                toolNames.add(tool.getName());
-            }
-            toolsStr= String.join(", ", toolNames);
-        }
 
         String[] info = new String[6];
         info[0] = String.valueOf(id);
         info[1] = name;
         info[2] = String.valueOf(currentPosition);
-        info[3] = toolsStr;
+        info[3] = getToolsAsStr();
         info[4] = langsStr;
         info[5] = status.getDisplayName();
 
@@ -172,5 +165,18 @@ public class Player {
                 return;
             }
         }
+    }
+
+    public String getToolsAsStr() {
+        if (tools.isEmpty()) {
+            return "No tools";
+        }
+
+        ArrayList<String> toolNames = new ArrayList<>();
+        for (Tool tool : tools) {
+            toolNames.add(tool.getName());
+        }
+
+        return String.join(";", toolNames);
     }
 }
