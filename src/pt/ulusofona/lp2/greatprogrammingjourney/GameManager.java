@@ -272,7 +272,7 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
-            return false;
+            return true;
         }
 
         if (!currentPlayer.getFavoriteLanguages().isEmpty()) {
