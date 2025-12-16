@@ -1,5 +1,6 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.boarditems.tool;
 
+import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItem;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 
 public class FunctionalProgrammingTool extends Tool {
@@ -11,6 +12,14 @@ public class FunctionalProgrammingTool extends Tool {
     /* method */
     @Override
     public String react(Player player) {
-        return null;
+        player.addTool(this);
+        return "Recebeu a ferramenta Programação Funcional.";
+    }
+
+    @Override
+    public boolean cancels(BoardItem item) {
+        return item.getId() == 5   /* Duplicate Code abyss */
+                || item.getId() == 6   /* Side Effects abyss */
+                || item.getId() == 8;  /* Infinite Loop abyss */
     }
 }

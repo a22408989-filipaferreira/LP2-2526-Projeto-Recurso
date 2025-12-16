@@ -1,5 +1,6 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.boarditems.tool;
 
+import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItem;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 
 public class ProfessorHelpTool extends Tool {
@@ -12,5 +13,10 @@ public class ProfessorHelpTool extends Tool {
     @Override
     public String react(Player player) {
         return null;
+    }
+
+    @Override
+    public boolean cancels(BoardItem item) {
+        return false;
     }
 }
