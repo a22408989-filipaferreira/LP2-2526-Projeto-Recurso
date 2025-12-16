@@ -239,8 +239,13 @@ public class GameManager {
         String name = "";
 
         if (item != null) {
-            id = String.valueOf(item.getId());
             name = item.getName();
+
+            if (item.getType() == 0) {
+                id = "A:" + item.getId();
+            } else if (item.getType() == 1) {
+                id = "T:" + item.getId();
+            }
         }
 
         return new String[]{result, name, id};
