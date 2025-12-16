@@ -26,4 +26,8 @@ public abstract class BoardItem {
 
     /* signature of a method that reacts - according to the boardItem type */
     public abstract String react(Player player);
+
+    public boolean affectsAllPlayersInSlot() {
+        return false;
+    }
 }
