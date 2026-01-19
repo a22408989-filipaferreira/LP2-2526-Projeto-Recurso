@@ -11,7 +11,7 @@ public class FunctionalProgrammingTool extends Tool {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         player.addTool(this);
         return "Recebeu a ferramenta Programação Funcional.";
     }

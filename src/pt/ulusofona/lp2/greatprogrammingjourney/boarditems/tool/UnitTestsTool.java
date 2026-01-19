@@ -11,7 +11,7 @@ public class UnitTestsTool extends Tool {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         return null;
     }
 

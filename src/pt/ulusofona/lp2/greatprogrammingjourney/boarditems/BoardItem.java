@@ -26,7 +26,7 @@ public abstract class BoardItem {
     /* methods */
 
     /* signature of a method that reacts - according to the boardItem type */
-    public abstract String react(Player player);
+    public abstract String react(Player player, int currentTurn);
 
     public abstract int getType();
 

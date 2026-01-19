@@ -13,7 +13,7 @@ public abstract class Abyss extends BoardItem {
 
     /* signature of a method that reacts - according to the abyss type */
     @Override
-    public abstract String react(Player player);
+    public abstract String react(Player player, int currentTurn);
 
     @Override
     public int getType() {

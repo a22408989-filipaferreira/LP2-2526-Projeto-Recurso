@@ -10,7 +10,7 @@ public class DuplicateCodeAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         int previousPosition = player.getPreviousPosition();
         player.setCurrentPosition(previousPosition);
 

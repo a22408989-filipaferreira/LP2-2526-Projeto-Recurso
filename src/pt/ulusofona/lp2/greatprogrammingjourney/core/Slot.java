@@ -30,10 +30,8 @@ public class Slot {
         this.item = item;
     }
 
-    public String react(Player player) {
-        if (item == null) {
-            return "";
-        }
-        return item.react(player);
-    }
+//    public String react(Player player, int currentTurn) {
+//        if (item == null) return "";
+//        return item.react(player, currentTurn);
+//    }
 }

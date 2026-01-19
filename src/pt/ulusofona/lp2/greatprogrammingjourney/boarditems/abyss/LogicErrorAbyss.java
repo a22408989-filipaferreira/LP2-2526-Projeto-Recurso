@@ -10,7 +10,7 @@ public class LogicErrorAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         int diceValue = player.getLastDiceValue();
         int retreat = diceValue / 2;
 

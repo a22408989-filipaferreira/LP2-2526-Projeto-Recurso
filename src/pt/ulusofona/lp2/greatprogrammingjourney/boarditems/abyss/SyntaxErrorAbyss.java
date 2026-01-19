@@ -10,7 +10,7 @@ public class SyntaxErrorAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         int currentPosition = player.getCurrentPosition();
         int newPosition = currentPosition - 1;
 

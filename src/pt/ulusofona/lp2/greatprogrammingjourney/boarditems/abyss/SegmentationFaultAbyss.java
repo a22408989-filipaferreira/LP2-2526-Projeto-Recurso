@@ -10,7 +10,7 @@ public class SegmentationFaultAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         int newPosition = player.getCurrentPosition() - 3;
 
         if (newPosition < 1) {

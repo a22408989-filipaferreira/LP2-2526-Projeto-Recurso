@@ -10,7 +10,7 @@ public class CrashAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         if (player.hasToolThatCancels(this)) {
             return "Crash anulado por ferramenta.";
         }

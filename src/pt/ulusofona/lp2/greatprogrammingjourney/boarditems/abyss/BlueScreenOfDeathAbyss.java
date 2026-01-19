@@ -11,7 +11,7 @@ public class BlueScreenOfDeathAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         player.setStatus(PlayerStatus.DEFEATED);
         return "Caiu em Blue Screen of Death! Perdeu o jogo.";
     }

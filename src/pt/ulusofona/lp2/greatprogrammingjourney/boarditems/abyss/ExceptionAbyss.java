@@ -10,7 +10,7 @@ public class ExceptionAbyss extends Abyss {
 
     /* method */
     @Override
-    public String react(Player player) {
+    public String react(Player player, int currentTurn) {
         int newPosition = player.getCurrentPosition() - 2;
 
         if (newPosition < 1) {
