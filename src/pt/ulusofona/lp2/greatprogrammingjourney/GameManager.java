@@ -253,9 +253,9 @@ public class GameManager {
     }
 
     public boolean moveCurrentPlayer(int nrSpaces) {
-        if (nrSpaces < 1 || nrSpaces > 6) {
-            return false;
-        }
+//        if (nrSpaces < 1 || nrSpaces > 6) {
+//            return false;
+//        }
 
         if (board == null || turnManager == null) {
             return false;
@@ -333,9 +333,7 @@ public class GameManager {
         int playerTurn = currentPlayer.getTurnsPlayed() + 1;
         String message = item.react(currentPlayer, playerTurn);
 
-        if (currentPlayer.isStuck()) {
-            endTurn(currentPlayer);
-        }
+        boolean stuckNow = currentPlayer.isStuck();
 
         if (item.swapsStuckPlayer()) {
             for (Player p : playersHere) {
@@ -343,15 +341,13 @@ public class GameManager {
             }
         }
 
-        if(playersHere.size() >= 2){
-            if (item.affectsAllPlayersInSlot()) {
+        if(playersHere.size() >= 2 && item.affectsAllPlayersInSlot()){
                 for (Player p : playersHere) {
                     if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
                         int pTurn = p.getTurnsPlayed() + 1;
                         item.react(p, pTurn);
                     }
                 }
-            }
         }
 
         endTurn(currentPlayer);
