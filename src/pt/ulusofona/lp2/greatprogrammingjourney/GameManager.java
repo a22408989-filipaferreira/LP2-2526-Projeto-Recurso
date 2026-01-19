@@ -263,13 +263,14 @@ public class GameManager {
 
         Player currentPlayer = turnManager.getCurrentPlayer();
 
-        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
-            return false;
-        }
-
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
+            currentTurn++;
             return true;
+        }
+
+        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
+            return false;
         }
 
         if (!currentPlayer.getFavoriteLanguages().isEmpty()) {
@@ -295,7 +296,7 @@ public class GameManager {
         }
 
         currentPlayer.setCurrentPosition(newPosition);
-
+        currentTurn++;
         return true;
     }
 

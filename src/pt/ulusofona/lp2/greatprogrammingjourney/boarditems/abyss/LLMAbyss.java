@@ -10,7 +10,6 @@ public class LLMAbyss extends Abyss {
     }
 
     /* method */
-    @Override
     public String react(Player player, int currentTurn) {
         if (currentTurn <= 3) {
 
@@ -19,10 +18,10 @@ public class LLMAbyss extends Abyss {
                 return "LLM anulado por Ajuda Do Professor.";
             }
 
-            int newPos = player.getCurrentPosition() - player.getLastDiceValue();
-            if (newPos < 1) newPos = 1;
+            int prev = player.getPreviousPosition();
+            if (prev < 1){ prev = 1; }
 
-            player.setCurrentPosition(newPos);
+            player.setCurrentPosition(prev);
             return "Caiu no LLM! Recua para a posição onde estava antes.";
         }
 
