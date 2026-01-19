@@ -16,21 +16,17 @@ public class LLMAbyss extends Abyss {
 
             if (player.hasToolThatCancels(this)) {
                 player.consumeToolThatCancels(this);
-
                 return "LLM anulado por Ajuda Do Professor.";
             }
 
-            int prev = player.getPreviousPosition();
-            player.setCurrentPosition(prev);
+            int newPos = player.getCurrentPosition() - player.getLastDiceValue();
+            if (newPos < 1) newPos = 1;
 
+            player.setCurrentPosition(newPos);
             return "Caiu no LLM! Recua para a posição onde estava antes.";
         }
 
-        int advance = player.getLastDiceValue();
-        int newPos = player.getCurrentPosition() + advance;
-
-        if (newPos < 1) { newPos = 1; }
-
+        int newPos = player.getCurrentPosition() + player.getLastDiceValue();
         player.setCurrentPosition(newPos);
 
         return "Caiu no LLM mas já tem experiência! Avança tantas casas quantas as do último movimento.";
