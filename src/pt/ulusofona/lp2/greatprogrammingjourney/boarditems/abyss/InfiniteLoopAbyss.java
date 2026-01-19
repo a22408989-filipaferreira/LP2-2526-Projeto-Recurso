@@ -17,6 +17,6 @@ public class InfiniteLoopAbyss extends Abyss {
 
     @Override
     public boolean swapsStuckPlayer() {
-        return true;
+        return false;
     }
 }

@@ -269,7 +269,7 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
-            return true;
+            return false;
         }
 
         if (!currentPlayer.getFavoriteLanguages().isEmpty()) {
@@ -383,6 +383,12 @@ public class GameManager {
             if (player.getCurrentPosition() == lastPosition) {
                 gameResult = new WinResult(player);
                 gameIsOver = true;
+
+                int winnerId = player.getId();
+                while (turnManager.getCurrentPlayerID() != winnerId) {
+                    turnManager.nextTurn();
+                }
+
                 return true;
             }
         }
@@ -426,18 +432,24 @@ public class GameManager {
         ArrayList<Player> remainingPlayers = new ArrayList<>(players);
         remainingPlayers.remove(winner);
 
-        /* bubble sort - sort by closest to the finish */
-        for (int i = 0; i < remainingPlayers.size() - 1; i++) {
-            for (int j = 0; j < remainingPlayers.size() - 1 - i; j++) {
-                Player p1 = remainingPlayers.get(j);
-                Player p2 = remainingPlayers.get(j + 1);
+        remainingPlayers.sort((p1, p2) -> {
+            int cmp = Integer.compare(p2.getCurrentPosition(), p1.getCurrentPosition()); // desc by position
+            if (cmp != 0) return cmp;
+            return p1.getName().compareToIgnoreCase(p2.getName()); // asc by name
+        });
 
-                if (p1.getCurrentPosition() < p2.getCurrentPosition()) {
-                    remainingPlayers.set(j, p2);
-                    remainingPlayers.set(j + 1, p1);
-                }
-            }
-        }
+//        /* bubble sort - sort by closest to the finish */
+//        for (int i = 0; i < remainingPlayers.size() - 1; i++) {
+//            for (int j = 0; j < remainingPlayers.size() - 1 - i; j++) {
+//                Player p1 = remainingPlayers.get(j);
+//                Player p2 = remainingPlayers.get(j + 1);
+//
+//                if (p1.getCurrentPosition() < p2.getCurrentPosition()) {
+//                    remainingPlayers.set(j, p2);
+//                    remainingPlayers.set(j + 1, p1);
+//                }
+//            }
+//        }
 
         for (Player player : remainingPlayers) {
             results.add(player.getName() + " " + player.getCurrentPosition());

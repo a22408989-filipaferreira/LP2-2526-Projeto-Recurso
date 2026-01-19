@@ -12,27 +12,27 @@ public class LLMAbyss extends Abyss {
     /* method */
     @Override
     public String react(Player player, int currentTurn) {
-        int newPosition = player.getCurrentPosition();
-        String msgResult;
+        if (currentTurn <= 3) {
 
-        if(currentTurn >= 4){
-            newPosition = player.getCurrentPosition() + player.getLastDiceValue();
-            msgResult = "Caiu no LLM mas já tem experiência! Avança tantas casas quantas as do último movimento.";
-        } else { /* player have tools and the game go in 4th or more turn */
             if (player.hasToolThatCancels(this)) {
-                msgResult = "LLM anulado por Ajuda Do Professor.";
-            } else { /* player haven't tools and the game go in 4th or more turn */
-                newPosition = player.getPreviousPosition();
-                msgResult = "Caiu no LLM! Recua para a posição onde estava antes.";
+                player.consumeToolThatCancels(this);
+
+                return "LLM anulado por Ajuda Do Professor.";
             }
+
+            int prev = player.getPreviousPosition();
+            player.setCurrentPosition(prev);
+
+            return "Caiu no LLM! Recua para a posição onde estava antes.";
         }
 
-        if (newPosition < 1) {
-            newPosition = 1;
-        }
+        int advance = player.getLastDiceValue();
+        int newPos = player.getCurrentPosition() + advance;
 
-        player.setCurrentPosition(newPosition);
+        if (newPos < 1) newPos = 1;
 
-        return msgResult;
+        player.setCurrentPosition(newPos);
+
+        return "Caiu no LLM mas já tem experiência! Avança tantas casas quantas as do último movimento.";
     }
 }
