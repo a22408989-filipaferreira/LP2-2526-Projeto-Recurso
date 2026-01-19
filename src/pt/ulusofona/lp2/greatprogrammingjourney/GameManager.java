@@ -256,53 +256,63 @@ public class GameManager {
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
+
         if (board == null || turnManager == null) {
             return false;
         }
 
         Player currentPlayer = turnManager.getCurrentPlayer();
 
+        if (currentPlayer.isStuck()) {
+            currentPlayer.setStuck(false);
+            endTurn(currentPlayer);
+            return false;
+        }
+
         if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
             return false;
         }
 
-        // If stuck: player loses the turn (should NOT move)
-        if (currentPlayer.isStuck()) {
-            currentPlayer.setStuck(false);   // "spends" the stuck penalty
-            endTurn(currentPlayer);          // counts as that player's turn played
-            return false;                    // IMPORTANT for tests
-        }
-
-        // language limitations
         if (!currentPlayer.getFavoriteLanguages().isEmpty()) {
             String lang = currentPlayer.getFavoriteLanguages().get(0);
-            if (lang.equals("Assembly") && nrSpaces > 2) return false;
-            if (lang.equals("C") && nrSpaces > 3) return false;
+
+            if (lang.equals("Assembly") && nrSpaces > 2) {
+                return false;
+            }
+
+            if (lang.equals("C") && nrSpaces > 3) {
+                return false;
+            }
         }
 
         currentPlayer.setLastDiceValue(nrSpaces);
 
-        int newPos = currentPlayer.getCurrentPosition() + nrSpaces;
-        if (newPos > board.getSize()) newPos = board.getSize();
+        int currentPosition = currentPlayer.getCurrentPosition();
+        int boardSize = board.getSize();
+        int newPosition = currentPosition + nrSpaces;
 
-        currentPlayer.setCurrentPosition(newPos);
+        if (newPosition > boardSize) {
+            newPosition = boardSize;
+        }
+
+        currentPlayer.setCurrentPosition(newPosition);
+
         return true;
     }
 
     public String reactToAbyssOrTool() {
         Player currentPlayer = turnManager.getCurrentPlayer();
         int position = currentPlayer.getCurrentPosition();
+        List<Player> playersHere = getPlayersInPosition(position);
 
         Slot slot = board.getSlot(position);
         BoardItem item = slot.getItem();
 
-        // no item -> end turn, no message
         if (item == null) {
             endTurn(currentPlayer);
             return null;
         }
 
-        // TOOL
         if (item.isCollectable()) {
             Tool tool = item.asTool();
 
@@ -312,46 +322,42 @@ public class GameManager {
                 return "Apanhou a ferramenta " + tool.getName();
             }
 
-            // IMPORTANT: do NOT end turn here (tests usually keep the same player)
             return "Já tens esta ferramenta";
         }
 
-        // ABYSS cancelled by tool (NON-LLM)
         if (item.getId() != 20 && currentPlayer.hasToolThatCancels(item)) {
             currentPlayer.consumeToolThatCancels(item);
             endTurn(currentPlayer);
             return "A ferramenta " + item.getName() + " anulou o abismo";
         }
 
-        // react with PLAYER INDIVIDUAL TURN (for LLM)
-        int playerTurn = currentPlayer.getTurnsPlayed() + 1; // 1-based
+        int playerTurn = currentPlayer.getTurnsPlayed() + 1;
         String message = item.react(currentPlayer, playerTurn);
 
-        // apply to other players if needed (using their individual turns too)
-        if (item.affectsAllPlayersInSlot()) {
-            List<Player> playersHere = getPlayersInPosition(position);
-            for (Player p : playersHere) {
-                if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
-                    int pTurn = p.getTurnsPlayed() + 1;
-                    item.react(p, pTurn);
-                }
-            }
+        if (currentPlayer.isStuck()) {
+            endTurn(currentPlayer);
+            return null; // tests expect null when stuck
         }
 
-        // special behavior: "swap stuck" (if your project uses this meaning)
         if (item.swapsStuckPlayer()) {
-            List<Player> playersHere = getPlayersInPosition(position);
             for (Player p : playersHere) {
                 p.setStuck(false);
             }
         }
 
-        // If the abyss left the current player stuck, tests expect null (ex: Ciclo Infinito)
-        boolean becameStuck = currentPlayer.isStuck();
+        if(playersHere.size() >= 2){
+            if (item.affectsAllPlayersInSlot()) {
+                for (Player p : playersHere) {
+                    if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
+                        int pTurn = p.getTurnsPlayed() + 1;
+                        item.react(p, pTurn);
+                    }
+                }
+            }
+        }
 
         endTurn(currentPlayer);
-
-        return becameStuck ? null : message;
+        return message;
     }
 
     public boolean gameIsOver() {
@@ -361,25 +367,21 @@ public class GameManager {
 
         int lastPosition = board.getSize();
 
-        // winner = lowest id among players at last position
-        Player winner = null;
-        for (Player p : players) {
-            if (p.getStatus() == PlayerStatus.IN_GAME && p.getCurrentPosition() == lastPosition) {
-                if (winner == null || p.getId() < winner.getId()) {
-                    winner = p;
+        List<Player> sortedPlayers = new ArrayList<>(players);
+        sortedPlayers.sort(Comparator.comparing(Player::getName, String.CASE_INSENSITIVE_ORDER));
+
+        for (Player player : sortedPlayers) {
+            if (player.getCurrentPosition() == lastPosition) {
+                gameResult = new WinResult(player);
+                gameIsOver = true;
+
+                int winnerId = player.getId();
+                while (turnManager.getCurrentPlayerID() != winnerId) {
+                    turnManager.nextTurn();
                 }
-            }
-        }
 
-        if (winner != null) {
-            gameResult = new WinResult(winner);
-            gameIsOver = true;
-
-            int winnerId = winner.getId();
-            while (turnManager.getCurrentPlayerID() != winnerId) {
-                turnManager.nextTurn();
+                return true;
             }
-            return true;
         }
 
         if (noOneCanMove()) {
