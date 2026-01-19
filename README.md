@@ -2,7 +2,8 @@
 
 👥 **Autores**
 ---
-- Filipa Ferreira — a22408989  
+- Filipa Ferreira — a22408989
+- Beatriz Carboila — a22407398 
 
 ---
 
