@@ -3,8 +3,8 @@ package pt.ulusofona.lp2.greatprogrammingjourney.tests;
 import org.junit.jupiter.api.Test;
 import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItem;
 import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItemFactory;
-import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.tool.ExceptionHandlingTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.tool.Tool;
+import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.tool.UnitTestsTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.enums.Color;
 import pt.ulusofona.lp2.greatprogrammingjourney.enums.PlayerStatus;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
@@ -83,5 +83,34 @@ public class TestPlayer {
         assertEquals(0, p.getTurnsPlayed());
         p.incrementTurnsPlayed();
         assertEquals(1, p.getTurnsPlayed());
+    }
+
+    @Test
+    void hasToolThatCancels_returnsTrue_whenToolExists() {
+        Player p = new Player(1, "Ana", "", Color.BLUE);
+        p.setStatus(PlayerStatus.IN_GAME);
+
+        p.addTool(new UnitTestsTool());
+
+        BoardItem segFault = BoardItemFactory.create(0, 9);
+
+        assertTrue(p.hasToolThatCancels(segFault));
+    }
+
+    @Test
+    void consumeToolThatCancels_removesToolFromInventory() {
+        Player p = new Player(1, "Ana", "", Color.BLUE);
+        p.setStatus(PlayerStatus.IN_GAME);
+
+        p.addTool(new UnitTestsTool());
+
+        BoardItem segFault = BoardItemFactory.create(0, 9);
+
+        assertTrue(p.hasToolThatCancels(segFault));
+
+        p.consumeToolThatCancels(segFault);
+
+        assertFalse(p.hasToolThatCancels(segFault));
+        assertEquals("No tools", p.getToolsAsStr());
     }
 }

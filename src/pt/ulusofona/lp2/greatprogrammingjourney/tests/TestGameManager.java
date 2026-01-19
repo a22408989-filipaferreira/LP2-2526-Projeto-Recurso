@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import pt.ulusofona.lp2.greatprogrammingjourney.GameManager;
 import pt.ulusofona.lp2.greatprogrammingjourney.InvalidFileException;
+import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItemFactory;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -180,5 +182,34 @@ public class TestGameManager {
 
         GameManager gm = new GameManager();
         assertThrows(InvalidFileException.class, () -> gm.loadGame(f));
+    }
+
+    @Test
+    void reactToAbyssOrTool_withToolCancelsSegFault_playerDoesNotGetStuck() {
+        GameManager gm = new GameManager();
+
+        String[][] players = {
+                {"1","Ana","","Blue"},
+                {"2","Bob","","Green"}
+        };
+
+        String[][] items = {
+                {"1","2","1"},
+                {"0","9","2"}
+        };
+
+        assertTrue(gm.createInitialBoard(players, 6, items));
+
+        gm.reactToAbyssOrTool();
+
+        gm.reactToAbyssOrTool();
+
+        assertTrue(gm.moveCurrentPlayer(1));
+
+        gm.reactToAbyssOrTool();
+
+        String infoAna = Arrays.toString(gm.getProgrammerInfo(1));
+        assertFalse(infoAna.contains("Preso"));
+        assertFalse(infoAna.contains("STUCK"));
     }
 }
