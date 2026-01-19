@@ -292,7 +292,8 @@ public class GameManager {
         int newPosition = currentPosition + nrSpaces;
 
         if (newPosition > boardSize) {
-            newPosition = boardSize;
+            int excess = newPosition - boardSize;
+            newPosition = boardSize - excess;
         }
 
         currentPlayer.setCurrentPosition(newPosition);
