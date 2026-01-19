@@ -18,6 +18,6 @@ public class InheritanceTool extends Tool {
 
     @Override
     public boolean cancels(BoardItem item) {
-        return item.getName().equals("Herança");
+        return item.getId() == 5; /* Duplicate Code abyss */
     }
 }
