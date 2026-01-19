@@ -253,7 +253,7 @@ public class GameManager {
     }
 
     public boolean moveCurrentPlayer(int nrSpaces) {
-        if (nrSpaces < 1 || nrSpaces > 6) {
+        if (nrSpaces < 1 || nrSpaces > 100) {
             return false;
         }
 
@@ -328,6 +328,23 @@ public class GameManager {
             currentPlayer.consumeToolThatCancels(item);
             endTurn(currentPlayer);
             return "A ferramenta " + item.getName() + " anulou o abismo";
+        }
+
+        if (item.getType() == 0 && item.getId() == 8) {
+            List<Player> allHere = getPlayersInPositionIncludingStuck(position);
+
+            for (Player p : allHere) {
+                if (p != currentPlayer && p.isStuck()) {
+                    p.setStuck(false);
+                }
+            }
+
+            int playerTurn = currentPlayer.getTurnsPlayed() + 1;
+            String m = item.react(currentPlayer, playerTurn);
+
+            endTurn(currentPlayer);
+
+            return m;
         }
 
         int playerTurn = currentPlayer.getTurnsPlayed() + 1;
@@ -672,5 +689,15 @@ public class GameManager {
 
     private boolean isActive(Player p) {
         return p != null && p.getStatus() != PlayerStatus.DEFEATED;
+    }
+
+    private List<Player> getPlayersInPositionIncludingStuck(int position) {
+        List<Player> result = new ArrayList<>();
+        for (Player p : players) {
+            if (p != null && p.getStatus() != PlayerStatus.DEFEATED && p.getCurrentPosition() == position) {
+                result.add(p);
+            }
+        }
+        return result;
     }
 }
