@@ -418,10 +418,12 @@ public class GameManager {
         return false;
     }
 
-    public ArrayList<String> getGameResults(){
+    public ArrayList<String> getGameResults() {
         ArrayList<String> results = new ArrayList<>();
 
-        if (!gameIsOver || gameResult == null){ return results; }
+        if (!gameIsOver || gameResult == null) {
+            return results;
+        }
 
         results.add("THE GREAT PROGRAMMING JOURNEY");
         results.add("");
@@ -432,14 +434,29 @@ public class GameManager {
         if (gameResult.isTie()) {
             results.add(gameResult.getEndMessage());
             results.add("");
-            results.add("PARTICIPANTES");
-            for (Player p : players) {
-                results.add(p.getName() + " : " + p.getCurrentPosition() + " : " + getAbyssNameAtPlayer(p));
+            results.add("Participantes");
+
+            ArrayList<Player> sorted = new ArrayList<>(players);
+
+            sorted.sort((p1, p2) -> {
+                int cmp = Integer.compare(p2.getCurrentPosition(), p1.getCurrentPosition());
+                if (cmp != 0) return cmp;
+                return p1.getName().compareToIgnoreCase(p2.getName());
+            });
+
+            for (Player p : sorted) {
+                results.add(
+                        p.getName() + " : " +
+                                p.getCurrentPosition() + " : " +
+                                getAbyssNameAtPlayer(p)
+                );
             }
+
             return results;
         }
 
         Player winner = gameResult.getWinner();
+
         results.add("VENCEDOR");
         results.add(winner.getName());
         results.add("");
@@ -449,13 +466,13 @@ public class GameManager {
         remainingPlayers.remove(winner);
 
         remainingPlayers.sort((p1, p2) -> {
-            int cmp = Integer.compare(p2.getCurrentPosition(), p1.getCurrentPosition()); // desc by position
-            if (cmp != 0){ return cmp; }
-            return p1.getName().compareToIgnoreCase(p2.getName()); // asc by name
+            int cmp = Integer.compare(p2.getCurrentPosition(), p1.getCurrentPosition());
+            if (cmp != 0) return cmp;
+            return p1.getName().compareToIgnoreCase(p2.getName());
         });
 
-        for (Player player : remainingPlayers) {
-            results.add(player.getName() + " " + player.getCurrentPosition());
+        for (Player p : remainingPlayers) {
+            results.add(p.getName() + " " + p.getCurrentPosition());
         }
 
         return results;
