@@ -29,7 +29,7 @@ public class LLMAbyss extends Abyss {
         int advance = player.getLastDiceValue();
         int newPos = player.getCurrentPosition() + advance;
 
-        if (newPos < 1) newPos = 1;
+        if (newPos < 1) { newPos = 1; }
 
         player.setCurrentPosition(newPos);
 
