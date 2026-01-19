@@ -3,9 +3,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItem;
 import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.BoardItemFactory;
 import pt.ulusofona.lp2.greatprogrammingjourney.boarditems.tool.Tool;
-import pt.ulusofona.lp2.greatprogrammingjourney.core.Board;
-import pt.ulusofona.lp2.greatprogrammingjourney.core.Slot;
-import pt.ulusofona.lp2.greatprogrammingjourney.core.TurnManager;
+import pt.ulusofona.lp2.greatprogrammingjourney.core.*;
 import pt.ulusofona.lp2.greatprogrammingjourney.enums.Color;
 import pt.ulusofona.lp2.greatprogrammingjourney.enums.PlayerStatus;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
@@ -21,15 +19,14 @@ public class GameManager {
     private ArrayList<Player> players = new ArrayList<>();
     private TurnManager turnManager;
     private boolean gameIsOver;
-    private Player winner;
     private int currentTurn;
+    private GameResult gameResult;  /* null until game ends */
 
     /* constructor */
     public GameManager() {
         this.board = null;
         this.turnManager = null;
         this.gameIsOver = false;
-        this.winner = null;
         this.currentTurn = 0;
     }
 
@@ -97,7 +94,7 @@ public class GameManager {
 
         this.currentTurn = 1;
         this.gameIsOver = false;
-        this.winner = null;
+        this.gameResult = null;
 
         return true;
     }
@@ -305,6 +302,7 @@ public class GameManager {
     public String reactToAbyssOrTool() {
         Player currentPlayer = turnManager.getCurrentPlayer();
         int position = currentPlayer.getCurrentPosition();
+        List<Player> playersHere = getPlayersInPosition(position);
 
         Slot slot = board.getSlot(position);
         BoardItem item = slot.getItem();
@@ -328,26 +326,26 @@ public class GameManager {
             return "Já tens esta ferramenta";
         }
 
-        if (currentPlayer.hasToolThatCancels(item)) {
+        if (item.getId() != 20 && currentPlayer.hasToolThatCancels(item)) {
             currentPlayer.consumeToolThatCancels(item);
             currentTurn++;
             turnManager.nextTurn();
             return "A ferramenta " + item.getName() + " anulou o abismo";
         }
 
-        String message = item.react(currentPlayer);
+        String message = item.react(currentPlayer, currentTurn);
 
         if (item.swapsStuckPlayer()) {
-            for (Player p : getPlayersInPosition(position)) {
+            for (Player p : playersHere) {
                 p.setStuck(false);
             }
         }
 
-        if(getPlayersInPosition(position).size() >= 2){
+        if(playersHere.size() >= 2){
             if (item.affectsAllPlayersInSlot()) {
-                for (Player p : getPlayersInPosition(position)) {
+                for (Player p : playersHere) {
                     if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
-                        item.react(p);
+                        item.react(p, currentTurn);
                     }
                 }
             }
@@ -361,6 +359,7 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentTurn++;
+            turnManager.nextTurn();
             return message;
         }
 
@@ -378,15 +377,20 @@ public class GameManager {
         int lastPosition = board.getSize();
 
         List<Player> sortedPlayers = new ArrayList<>(players);
-
         sortedPlayers.sort(Comparator.comparing(Player::getName, String.CASE_INSENSITIVE_ORDER));
 
         for (Player player : sortedPlayers) {
             if (player.getCurrentPosition() == lastPosition) {
-                winner = player;
+                gameResult = new WinResult(player);
                 gameIsOver = true;
                 return true;
             }
+        }
+
+        if (noOneCanMove()) {
+            gameResult = new TieResult();
+            gameIsOver = true;
+            return true;
         }
 
         return false;
@@ -395,21 +399,29 @@ public class GameManager {
     public ArrayList<String> getGameResults(){
         ArrayList<String> results = new ArrayList<>();
 
-        if (!gameIsOver || winner == null) {
-            return results;
-        }
+        if (!gameIsOver || gameResult == null){ return results; }
 
         results.add("THE GREAT PROGRAMMING JOURNEY");
         results.add("");
         results.add("NR. DE TURNOS");
         results.add(String.valueOf(currentTurn));
         results.add("");
+
+        if (gameResult.isTie()) {
+            results.add(gameResult.getEndMessage());
+            results.add("");
+            results.add("PARTICIPANTES");
+            for (Player p : players) {
+                results.add(p.getName() + " : " + p.getCurrentPosition() + " : " + getAbyssNameAtPlayer(p));
+            }
+            return results;
+        }
+
+        Player winner = gameResult.getWinner();
         results.add("VENCEDOR");
         results.add(winner.getName());
         results.add("");
         results.add("RESTANTES");
-
-        int lastPosition = board.getSize();
 
         ArrayList<Player> remainingPlayers = new ArrayList<>(players);
         remainingPlayers.remove(winner);
@@ -515,8 +527,8 @@ public class GameManager {
                 turnManager.nextTurn();
             }
 
-            this.winner = null;
             this.gameIsOver = false;
+            this.gameResult = null;
 
         } catch (IllegalArgumentException e) {
             throw new InvalidFileException();
@@ -623,5 +635,37 @@ public class GameManager {
             }
         }
         throw new InvalidFileException();
+    }
+
+    private boolean canMove(Player p, int dice) {
+        if (p.getStatus() != PlayerStatus.IN_GAME){ return false; }
+        if (p.isStuck()){ return false; }
+        if (dice < 1 || dice > 6){ return false; }
+
+        if (!p.getFavoriteLanguages().isEmpty()) {
+            String lang = p.getFavoriteLanguages().get(0);
+            if (lang.equals("Assembly") && dice > 2){ return false; }
+            if (lang.equals("C") && dice > 3){ return false; }
+        }
+        return true;
+    }
+
+    private boolean noOneCanMove() {
+        for (Player p : players) {
+            if (p.getStatus() != PlayerStatus.IN_GAME){ continue; }
+            for (int dice = 1; dice <= 6; dice++) {
+                if (canMove(p, dice)){ return false; }
+            }
+        }
+        return true;
+    }
+
+    private String getAbyssNameAtPlayer(Player p) {
+        Slot slot = board.getSlot(p.getCurrentPosition());
+        BoardItem item = slot.getItem();
+        if (item != null && !item.isCollectable()) {
+            return item.getName();
+        }
+        return "";
     }
 }
