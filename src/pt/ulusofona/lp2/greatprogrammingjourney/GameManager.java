@@ -263,39 +263,27 @@ public class GameManager {
 
         Player currentPlayer = turnManager.getCurrentPlayer();
 
-        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
-            return false;
-        }
-
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
+            return true;
+        }
+
+        if (currentPlayer.getStatus() == PlayerStatus.DEFEATED) {
             return false;
         }
 
         if (!currentPlayer.getFavoriteLanguages().isEmpty()) {
             String lang = currentPlayer.getFavoriteLanguages().get(0);
-
-            if (lang.equals("Assembly") && nrSpaces > 2) {
-                return false;
-            }
-
-            if (lang.equals("C") && nrSpaces > 3) {
-                return false;
-            }
+            if (lang.equals("Assembly") && nrSpaces > 2){ return false; }
+            if (lang.equals("C") && nrSpaces > 3){ return false; }
         }
 
         currentPlayer.setLastDiceValue(nrSpaces);
 
-        int currentPosition = currentPlayer.getCurrentPosition();
-        int boardSize = board.getSize();
-        int newPosition = currentPosition + nrSpaces;
-
-        if (newPosition > boardSize) {
-            newPosition = boardSize;
-        }
+        int newPosition = currentPlayer.getCurrentPosition() + nrSpaces;
+        if (newPosition > board.getSize()){ newPosition = board.getSize();}
 
         currentPlayer.setCurrentPosition(newPosition);
-
         return true;
     }
 
