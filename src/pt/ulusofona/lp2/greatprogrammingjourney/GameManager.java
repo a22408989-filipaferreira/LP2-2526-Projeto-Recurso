@@ -265,7 +265,6 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
-            endTurn(currentPlayer);
             return false;
         }
 
@@ -336,7 +335,6 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             endTurn(currentPlayer);
-            return null; // tests expect null when stuck
         }
 
         if (item.swapsStuckPlayer()) {
