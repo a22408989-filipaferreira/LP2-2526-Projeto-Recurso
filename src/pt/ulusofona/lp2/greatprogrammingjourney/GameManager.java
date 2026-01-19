@@ -196,7 +196,7 @@ public class GameManager {
         boolean first = true;
 
         for (Player player : players) {
-            if (player.getStatus() != PlayerStatus.IN_GAME) {
+            if (player.getStatus() == PlayerStatus.DEFEATED) {
                 continue;
             }
 
@@ -434,13 +434,13 @@ public class GameManager {
         if (gameResult.isTie()) {
             results.add(gameResult.getEndMessage());
             results.add("");
-            results.add("Participantes");
+            results.add("Participantes:");
 
             ArrayList<Player> sorted = new ArrayList<>(players);
 
             sorted.sort((p1, p2) -> {
                 int cmp = Integer.compare(p2.getCurrentPosition(), p1.getCurrentPosition());
-                if (cmp != 0) return cmp;
+                if (cmp != 0){ return cmp; }
                 return p1.getName().compareToIgnoreCase(p2.getName());
             });
 
@@ -467,7 +467,7 @@ public class GameManager {
 
         remainingPlayers.sort((p1, p2) -> {
             int cmp = Integer.compare(p2.getCurrentPosition(), p1.getCurrentPosition());
-            if (cmp != 0) return cmp;
+            if (cmp != 0){ return cmp; }
             return p1.getName().compareToIgnoreCase(p2.getName());
         });
 
