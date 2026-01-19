@@ -253,7 +253,7 @@ public class GameManager {
     }
 
     public boolean moveCurrentPlayer(int nrSpaces) {
-        if (nrSpaces < 1 || nrSpaces > 100) {
+        if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
 
