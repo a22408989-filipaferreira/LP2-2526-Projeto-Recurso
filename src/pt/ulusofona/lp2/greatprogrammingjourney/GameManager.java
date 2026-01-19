@@ -265,6 +265,7 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
+            currentPlayer.setLastDiceValue(nrSpaces);
             return false;
         }
 
@@ -373,12 +374,12 @@ public class GameManager {
         }
 
         if(playersHere.size() >= 2 && item.affectsAllPlayersInSlot()){
-                for (Player p : playersHere) {
-                    if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
-                        int pTurn = p.getTurnsPlayed() + 1;
-                        item.react(p, pTurn);
-                    }
+            for (Player p : playersHere) {
+                if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
+                    int pTurn = p.getTurnsPlayed() + 1;
+                    item.react(p, pTurn);
                 }
+            }
         }
 
         endTurn(currentPlayer);

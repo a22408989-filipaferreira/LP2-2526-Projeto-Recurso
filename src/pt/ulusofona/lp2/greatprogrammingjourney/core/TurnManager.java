@@ -8,51 +8,41 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TurnManager {
-    /* fields */
     private Queue<Player> playerOrder;
     private Player currentPlayer;
 
-    /* constructor */
     public TurnManager(ArrayList<Player> players) {
         this.playerOrder = new LinkedList<>(players);
         this.currentPlayer = playerOrder.peek();
     }
 
-    /* getters */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    /* methods */
     public int getCurrentPlayerID() {
-        return currentPlayer.getId();
+        return currentPlayer == null ? -1 : currentPlayer.getId();
     }
 
     public void nextTurn() {
-//         if (!playerOrder.isEmpty()) {
-//            playerOrder.add(playerOrder.poll());
-//            currentPlayer = playerOrder.peek();
-//        }
         if (playerOrder.isEmpty()) {
+            currentPlayer = null;
             return;
         }
 
-        playerOrder.add(playerOrder.poll());
-        currentPlayer = playerOrder.peek();
+        int tries = playerOrder.size();
 
-        advanceToNextActive();
-    }
-
-    private void advanceToNextActive() {
-        if (playerOrder.isEmpty()) {
-            return;
-        }
-
-        int safety = playerOrder.size(); // evita loop infinito
-        while (safety > 0 && currentPlayer != null && currentPlayer.getStatus() == PlayerStatus.DEFEATED) {
+        while (tries > 0) {
             playerOrder.add(playerOrder.poll());
             currentPlayer = playerOrder.peek();
-            safety--;
+
+            if (currentPlayer != null && currentPlayer.getStatus() != PlayerStatus.DEFEATED) {
+                return;
+            }
+
+            tries--;
         }
+
+        currentPlayer = null;
     }
 }
