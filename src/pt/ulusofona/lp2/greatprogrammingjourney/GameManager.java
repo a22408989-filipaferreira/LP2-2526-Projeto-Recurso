@@ -292,8 +292,7 @@ public class GameManager {
         int newPosition = currentPosition + nrSpaces;
 
         if (newPosition > boardSize) {
-            currentPlayer.setLastDiceValue(nrSpaces);
-            return false;
+            newPosition = boardSize;
         }
 
         currentPlayer.setCurrentPosition(newPosition);

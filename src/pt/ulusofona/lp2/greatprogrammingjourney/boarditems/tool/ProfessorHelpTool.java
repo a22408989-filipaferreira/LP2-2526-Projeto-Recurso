@@ -18,8 +18,8 @@ public class ProfessorHelpTool extends Tool {
     @Override
     public boolean cancels(BoardItem item) {
         return item.getId() == 1   /* Logic Error abyss */
-                || item.getId() == 3   /* FileNotFoundException abyss */
-                || item.getId() == 5  /* Duplicate Code abyss */
+                || item.getId() == 0   /* Syntax Error abyss */
+                || item.getId() == 9 /* Segmentation Fault abyss */
                 || item.getId() == 20; /* LLM abyss */
     }
 }

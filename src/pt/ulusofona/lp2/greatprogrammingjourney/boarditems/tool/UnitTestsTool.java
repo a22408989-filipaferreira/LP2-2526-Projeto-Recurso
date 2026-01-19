@@ -19,6 +19,7 @@ public class UnitTestsTool extends Tool {
     public boolean cancels(BoardItem item) {
         int id = item.getId();
         return id == 1  /* Logic Error abyss */
-                || id == 5; /* Duplicate Code abyss */
+                || id == 4 /* Crash abyss */
+                || id == 9; /* Segmentation Fault Abyss */
     }
 }

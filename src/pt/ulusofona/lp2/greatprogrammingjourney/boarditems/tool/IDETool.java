@@ -19,7 +19,6 @@ public class IDETool extends Tool {
     @Override
     public boolean cancels(BoardItem item) {
         return item.getId() == 0   /* Syntax Error abyss */
-                || item.getId() == 1   /* Logic Error abyss */
-                || item.getId() == 2;  /* Exception */
+                || item.getId() == 3; /* FileNotFoundException abyss */
     }
 }
