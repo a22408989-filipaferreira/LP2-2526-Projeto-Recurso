@@ -256,30 +256,29 @@ public class GameManager {
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
+
         if (board == null || turnManager == null) {
             return false;
         }
 
         Player currentPlayer = turnManager.getCurrentPlayer();
 
+        if (currentPlayer.isStuck()) {
+            currentPlayer.setStuck(false);
+            return false;
+        }
+
         if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
             return false;
         }
 
-        // Se está preso: esta jogada serve só para libertar (consome a vez)
-        if (currentPlayer.isStuck()) {
-            currentPlayer.setStuck(false);
-            currentPlayer.setLastDiceValue(nrSpaces); // opcional, mas não prejudica
-            return true; // jogada "válida", só não há movimento
-        }
-
-        // Restrições por linguagem favorita (assumindo que é a primeira)
         if (!currentPlayer.getFavoriteLanguages().isEmpty()) {
             String lang = currentPlayer.getFavoriteLanguages().get(0);
 
             if (lang.equals("Assembly") && nrSpaces > 2) {
                 return false;
             }
+
             if (lang.equals("C") && nrSpaces > 3) {
                 return false;
             }
@@ -287,12 +286,16 @@ public class GameManager {
 
         currentPlayer.setLastDiceValue(nrSpaces);
 
-        int newPosition = currentPlayer.getCurrentPosition() + nrSpaces;
-        if (newPosition > board.getSize()) {
-            newPosition = board.getSize();
+        int currentPosition = currentPlayer.getCurrentPosition();
+        int boardSize = board.getSize();
+        int newPosition = currentPosition + nrSpaces;
+
+        if (newPosition > boardSize) {
+            newPosition = boardSize;
         }
 
         currentPlayer.setCurrentPosition(newPosition);
+
         return true;
     }
 
