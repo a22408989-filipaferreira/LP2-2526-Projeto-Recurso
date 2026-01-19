@@ -265,7 +265,8 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
-            return true;
+            endTurn(currentPlayer);
+            return false;
         }
 
         if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
@@ -333,6 +334,11 @@ public class GameManager {
         int playerTurn = currentPlayer.getTurnsPlayed() + 1;
         String message = item.react(currentPlayer, playerTurn);
 
+        if (currentPlayer.isStuck()) {
+            endTurn(currentPlayer);
+            return null; // tests expect null when stuck
+        }
+
         if (item.swapsStuckPlayer()) {
             for (Player p : playersHere) {
                 p.setStuck(false);
@@ -340,7 +346,7 @@ public class GameManager {
         }
 
         if(playersHere.size() >= 2){
-            if (item.affectsAllPlayersInSlot() && item.affectsAllPlayersInSlot()) {
+            if (item.affectsAllPlayersInSlot()) {
                 for (Player p : playersHere) {
                     if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
                         int pTurn = p.getTurnsPlayed() + 1;
@@ -600,14 +606,11 @@ public class GameManager {
     /* helper methods */
     private List<Player> getPlayersInPosition(int position) {
         List<Player> result = new ArrayList<>();
-
         for (Player p : players) {
-            if (p.getStatus() == PlayerStatus.IN_GAME &&
-                    p.getCurrentPosition() == position) {
+            if (isActive(p) && p.getCurrentPosition() == position) {
                 result.add(p);
             }
         }
-
         return result;
     }
 
@@ -657,5 +660,9 @@ public class GameManager {
         currentPlayer.incrementTurnsPlayed();
         currentTurn++;
         turnManager.nextTurn();
+    }
+
+    private boolean isActive(Player p) {
+        return p != null && p.getStatus() != PlayerStatus.DEFEATED;
     }
 }
