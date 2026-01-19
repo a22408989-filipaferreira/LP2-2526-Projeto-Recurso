@@ -20,6 +20,7 @@ public class Player {
     private int lastDiceValue;
     private boolean stuck = false;
     private ArrayList<Tool> tools = new ArrayList<>();
+    private int turnsPlayed = 0;
 
     /* constructor */
     public Player(int id, String name, String languagesStr, Color color){
@@ -52,6 +53,10 @@ public class Player {
 
     public int getLastDiceValue() {
         return lastDiceValue;
+    }
+
+    public int getTurnsPlayed() {
+        return turnsPlayed;
     }
 
     public boolean isStuck() {
@@ -192,5 +197,9 @@ public class Player {
         toolNames.sort(String.CASE_INSENSITIVE_ORDER);
 
         return String.join(";", toolNames);
+    }
+
+    public void incrementTurnsPlayed() {
+        turnsPlayed++;
     }
 }

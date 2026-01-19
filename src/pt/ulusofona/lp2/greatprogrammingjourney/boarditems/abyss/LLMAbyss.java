@@ -10,18 +10,19 @@ public class LLMAbyss extends Abyss {
     }
 
     /* method */
-    public String react(Player player, int currentTurn) {
-        if (currentTurn <= 3) {
+    @Override
+    public String react(Player player, int playerTurn) {
+        if (playerTurn <= 3) {
 
             if (player.hasToolThatCancels(this)) {
                 player.consumeToolThatCancels(this);
                 return "LLM anulado por Ajuda Do Professor.";
             }
 
-            int prev = player.getPreviousPosition();
-            if (prev < 1){ prev = 1; }
+            int newPos = player.getCurrentPosition() - player.getLastDiceValue();
+            if (newPos < 1) newPos = 1;
 
-            player.setCurrentPosition(prev);
+            player.setCurrentPosition(newPos);
             return "Caiu no LLM! Recua para a posição onde estava antes.";
         }
 

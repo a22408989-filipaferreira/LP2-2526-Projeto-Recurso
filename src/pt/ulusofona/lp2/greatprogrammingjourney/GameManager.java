@@ -265,7 +265,6 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             currentPlayer.setStuck(false);
-            currentTurn++;
             return true;
         }
 
@@ -296,7 +295,7 @@ public class GameManager {
         }
 
         currentPlayer.setCurrentPosition(newPosition);
-        currentTurn++;
+
         return true;
     }
 
@@ -309,8 +308,7 @@ public class GameManager {
         BoardItem item = slot.getItem();
 
         if (item == null) {
-            currentTurn++;
-            turnManager.nextTurn();
+            endTurn(currentPlayer);
             return null;
         }
 
@@ -319,8 +317,8 @@ public class GameManager {
 
             if (!currentPlayer.hasTool(tool)) {
                 currentPlayer.addTool(tool);
-                currentTurn++;
-                turnManager.nextTurn();
+                currentPlayer.addTool(tool);
+                endTurn(currentPlayer);
                 return "Apanhou a ferramenta " + tool.getName();
             }
 
@@ -329,12 +327,12 @@ public class GameManager {
 
         if (item.getId() != 20 && currentPlayer.hasToolThatCancels(item)) {
             currentPlayer.consumeToolThatCancels(item);
-            currentTurn++;
-            turnManager.nextTurn();
+            endTurn(currentPlayer);
             return "A ferramenta " + item.getName() + " anulou o abismo";
         }
 
-        String message = item.react(currentPlayer, currentTurn);
+        int playerTurn = currentPlayer.getTurnsPlayed() + 1;
+        String message = item.react(currentPlayer, playerTurn);
 
         if (item.swapsStuckPlayer()) {
             for (Player p : playersHere) {
@@ -343,30 +341,33 @@ public class GameManager {
         }
 
         if(playersHere.size() >= 2){
-            if (item.affectsAllPlayersInSlot()) {
+            if (item.affectsAllPlayersInSlot() && item.affectsAllPlayersInSlot()) {
                 for (Player p : playersHere) {
                     if (p != currentPlayer && p.getStatus() == PlayerStatus.IN_GAME) {
-                        item.react(p, currentTurn);
+                        int pTurn = p.getTurnsPlayed() + 1;
+                        item.react(p, pTurn);
                     }
                 }
             }
         }
 
-        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
-            currentTurn++;
-            turnManager.nextTurn();
-            return message;
-        }
+//        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
+//            currentTurn++;
+//            turnManager.nextTurn();
+//            return message;
+//        }
+//
+//        if (currentPlayer.isStuck()) {
+//            currentTurn++;
+//            turnManager.nextTurn();
+//            return message;
+//        }
+//
+//        currentTurn++;
+//        turnManager.nextTurn();
+//        return message;
 
-        if (currentPlayer.isStuck()) {
-            currentTurn++;
-            turnManager.nextTurn();
-            return message;
-        }
-
-        currentTurn++;
-        turnManager.nextTurn();
-
+        endTurn(currentPlayer);
         return message;
     }
 
@@ -667,5 +668,11 @@ public class GameManager {
             return item.getName();
         }
         return "";
+    }
+
+    private void endTurn(Player currentPlayer) {
+        currentPlayer.incrementTurnsPlayed();
+        currentTurn++;
+        turnManager.nextTurn();
     }
 }
