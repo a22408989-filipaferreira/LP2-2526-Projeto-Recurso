@@ -26,6 +26,7 @@ public class BoardItemFactory {
             case 7: return new BlueScreenOfDeathAbyss();
             case 8: return new InfiniteLoopAbyss();
             case 9: return new SegmentationFaultAbyss();
+            case 20: return new LLMAbyss();
             default: return null;
         }
     }
