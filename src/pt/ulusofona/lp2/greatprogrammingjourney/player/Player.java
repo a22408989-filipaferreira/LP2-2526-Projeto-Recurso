@@ -75,9 +75,8 @@ public class Player {
     }
 
     public void setStuck(boolean stuck) {
-        if(stuck){
-            status = PlayerStatus.IN_GAME;
-        } else { status = PlayerStatus.STUCK; }
+        this.stuck = stuck;
+        this.status = stuck ? PlayerStatus.STUCK : PlayerStatus.IN_GAME;
     }
 
     /* methods */
@@ -188,6 +187,9 @@ public class Player {
         for (Tool tool : tools) {
             toolNames.add(tool.getName());
         }
+
+        /* sort tools to alphabetic order */
+        toolNames.sort(String.CASE_INSENSITIVE_ORDER);
 
         return String.join(";", toolNames);
     }
