@@ -333,6 +333,20 @@ public class GameManager {
         int playerTurn = currentPlayer.getTurnsPlayed() + 1;
         String message = item.react(currentPlayer, playerTurn);
 
+        if (item.getType() == 0 && item.getId() == 9 && playersHere.size() >= 2) {
+
+            for (Player p : players) {
+                if (p.getStatus() == PlayerStatus.IN_GAME) {
+                    int newPos = p.getCurrentPosition() - 3;
+                    if (newPos < 1) { newPos = 1;}
+                    p.setCurrentPosition(newPos);
+                }
+            }
+
+            endTurn(currentPlayer);
+            return "Falha de segmentação! Todos os jogadores recuaram 3 casas.";
+        }
+
         boolean stuckNow = currentPlayer.isStuck();
 
         if (item.swapsStuckPlayer()) {
