@@ -336,7 +336,6 @@ public class GameManager {
 
         if (currentPlayer.isStuck()) {
             endTurn(currentPlayer);
-            return null; // tests expect null when stuck
         }
 
         if (item.swapsStuckPlayer()) {
