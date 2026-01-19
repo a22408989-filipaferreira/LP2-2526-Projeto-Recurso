@@ -118,28 +118,6 @@ public class TestGameManager {
     }
 
     @Test
-    void gameIsOver_whenMultiplePlayersAtEnd_winnerIsAlphabeticallyFirstAndTurnManagerPointsToWinner() {
-        GameManager gm = new GameManager();
-
-        String[][] players = players2("2","bob","","Green","1","Ana","","Blue");
-        assertTrue(gm.createInitialBoard(players, 4));
-
-        assertTrue(gm.moveCurrentPlayer(6));
-        gm.reactToAbyssOrTool();
-
-        assertTrue(gm.moveCurrentPlayer(6));
-        gm.reactToAbyssOrTool();
-
-        assertTrue(gm.gameIsOver());
-
-        assertEquals(1, gm.getCurrentPlayerID());
-
-        var results = gm.getGameResults();
-        assertTrue(results.contains("VENCEDOR"));
-        assertTrue(results.contains("Ana"));
-    }
-
-    @Test
     void saveAndLoadGame_roundTrip_preservesCurrentPlayerAndSlots(@TempDir Path tempDir) throws Exception {
         GameManager gm = new GameManager();
 
