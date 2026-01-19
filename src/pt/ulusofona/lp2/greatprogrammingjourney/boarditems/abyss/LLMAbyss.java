@@ -20,7 +20,7 @@ public class LLMAbyss extends Abyss {
             }
 
             int newPos = player.getCurrentPosition() - player.getLastDiceValue();
-            if (newPos < 1) newPos = 1;
+            if (newPos < 1){ newPos = 1; }
 
             player.setCurrentPosition(newPos);
             return "Caiu no LLM! Recua para a posição onde estava antes.";

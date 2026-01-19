@@ -317,7 +317,6 @@ public class GameManager {
 
             if (!currentPlayer.hasTool(tool)) {
                 currentPlayer.addTool(tool);
-                currentPlayer.addTool(tool);
                 endTurn(currentPlayer);
                 return "Apanhou a ferramenta " + tool.getName();
             }
@@ -350,22 +349,6 @@ public class GameManager {
                 }
             }
         }
-
-//        if (currentPlayer.getStatus() != PlayerStatus.IN_GAME) {
-//            currentTurn++;
-//            turnManager.nextTurn();
-//            return message;
-//        }
-//
-//        if (currentPlayer.isStuck()) {
-//            currentTurn++;
-//            turnManager.nextTurn();
-//            return message;
-//        }
-//
-//        currentTurn++;
-//        turnManager.nextTurn();
-//        return message;
 
         endTurn(currentPlayer);
         return message;
