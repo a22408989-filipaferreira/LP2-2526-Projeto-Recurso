@@ -43,6 +43,6 @@ Abaixo encontra-se o diagrama UML desenvolvido para representar a estrutura prin
 
 📹 **Vídeo de demonstração**
 ---
-[- Java 20](https://youtu.be/efIXWfniStc)
+[- link](https://youtu.be/efIXWfniStc)
 
 ---
